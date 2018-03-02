@@ -1,0 +1,61 @@
+maze
+grid of cells 
+    4 possible movements -- 
+        up, down, left, right
+    allowed movements -- which of these movements are allowed
+        i.e., no up if there's a wall up.
+        16 possible combinations
+        none, (up), (down), (left), (right), (up, right), ...
+
+
+
+
+var aCell = {
+    i:
+    j: 
+    up:
+    down:
+    left:
+    right:
+    category: top, bottom, leftEdge, rightEdge
+    special: 
+}
+
+var aMaze = {
+    start: (i0,j0);
+    end: (i1,j1);
+    map: grid[];
+}
+
+allowedMotion: 
+    up:
+    down:
+    left:
+    right:
+    
+(i, j) = (row, col)
+(x, y) = (col, row)
+
+caterogies:
+    top:      y = ymax; i = imax
+    bottom:   y = ymin; i = imin
+    leftEdge: x = xmin; j = jmin
+    rightEdge: x = xmax; j = jmax
+
+logical rules:
+    if cell is leftEdge, left: 0;
+    if cell is rightEdge, right: 0;
+    if cell is top, up: 0;
+    if cell is bottom, down: 0;
+
+    if cell (i,i)  (i.e., (y,x))
+        i.j.up = i+1.j.down
+        i.j.down = i-1.j.up
+        i.j.left = i.j-1.rightEdge
+        i.j.right = i.j_1
+
+        top:        i.j.up = 0;
+        bottom:     i.j.down = 0
+        leftEdge:   i.j.left = 0
+        rightEdge   i.j.right = 0;
+

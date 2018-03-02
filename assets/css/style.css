@@ -1,0 +1,74 @@
+/************************************/
+
+/* styles for elements */
+
+/************************************/
+
+* {
+    text-align: center;
+    margin: auto;
+}
+
+/************************************/
+
+/* styles for classes */
+
+/************************************/
+
+.centerIt {
+    text-align: center;
+}
+
+.colA {
+    float: right;
+    min-width: 100px;
+}
+
+.colB {
+    float: left;
+    min-width: 100px;
+}
+
+.badge {
+    color: white !important;
+    background-color: #555555 !important;
+    font-weight: normal !important;
+    font-family: 'Courier New', Courier, monospace
+}
+
+.button {
+    margin: 10px;
+}
+
+.row {
+    margin: 10px 0px 10px 0;
+}
+
+/* .col-md-6 {
+    text-align: left;
+    margin-left: 0px;
+    padding-left: 0px;
+} */
+
+/************************************/
+
+/* styles for id's */
+
+/************************************/
+
+#title {
+    text-align: center;
+    font-family: 'Megrim', cursive;
+    font-weight: 900;
+    margin: 0;
+}
+
+/* #play-next {
+    background-color: green;
+    background-image: none;
+}
+
+#quit {
+    background-color: red;
+    background-image: none;
+} */

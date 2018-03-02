@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- reset browser styles -->
+  <link rel="assets/stylesheet" type="text/css" media="screen" href="styles/reset.css" />
+  <link href="https://fonts.googleapis.com/css?family=Audiowide|Caesar+Dressing|Emilys+Candy|Ewert|Expletus+Sans|Jolly+Lodger|Megrim|Monoton|Playball|Racing+Sans+One"
+    rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+    crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- /Users/charlesgoodwin/OneDrive/Bootcamp/HW05 trivia game/ -->
+  <script src="assets/javascript/app.js"></script>
+</head>
+
+<body>
+  <div id="all-the-html" class="container">
+    <header id="the-header">
+      <div id="logo" style="height: 50px"></div>
+      <nav></nav>
+    </header>
+    <div id="content" class="jumbotron">
+      <h1 id="title" class="centerIt">Math Test!</h1>
+      <div id="level-selector"></div>
+      <div id="timer-display">Time remaining: 0:<span id="timer">30</span></div>
+      <div class="horizontal-spacer"></div>
+      <h2 id="question">Question</h2>
+      <h1 id="response"></h1>
+      <div id="answerChoices">
+        <div class="row">
+          <div id="cell_A_01" class="col-md-6">
+            <button type="button" id="answer-1-btn" class="answer btn btn-primary colA">
+              <span class="badge">A</span>&nbsp;&nbsp;
+              <span id="answer1">Answer1</span>
+            </button>
+          </div>
+          <div id="cell_B_01" class="col-md-6">
+            <button type="button" id="answer-2-btn" class="answer btn btn-primary colB">
+              <span class="badge">B</span>&nbsp;&nbsp;
+              <span id="answer2">Answer2</span>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div id="cell_A_02" class="col-md-6">
+            <button type="button" id="answer-3-btn" class="answer btn btn-primary colA">
+              <span class="badge">C</span>&nbsp;&nbsp;
+              <span id="answer3">Answer3</span>
+            </button>
+          </div>
+          <div id="cell_B_02" class="col-md-6">
+            <button type="button" id="answer-4-btn" class="answer btn btn-primary colB">
+              <span class="badge">D</span>&nbsp;&nbsp;
+              <span id="answer4">Answer4</span>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div id="cell_A_03" class="col-md-6">
+            <button type="button" id="play-next" class="control-btn btn btn-success colA">
+              <!-- <span class="badge">C</span>&nbsp;&nbsp; -->
+              <span id="answer3">Play</span>
+            </button>
+          </div>
+          <div id="cell_B_03" class="col-md-6">
+            <button type="button" id="quit" class="control-btn btn btn-danger colB">
+              <!-- <span class="badge">D</span>&nbsp;&nbsp; -->
+              <span id="answer4">Quit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="theAnswer"></div>
+    </div>
+
+
+  </div>
+  <div id="script-calls">
+    <script>
+      var aSamplePlayer = {
+          playerScore: 0,
+          playerAnswers: [],
+      }
+      playGame(sampleQuestions, aSamplePlayer);
+    </script>
+  </div>
+
+</body>
+
+</html>
