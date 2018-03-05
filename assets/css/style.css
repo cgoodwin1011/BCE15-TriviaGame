@@ -19,15 +19,23 @@
     text-align: center;
 }
 
+grid-cell {
+    background-color: red;
+}
+
+
 .colA {
+    display: block;
     float: right;
+    text-align: right;
     min-width: 100px;
 }
 
 .colB {
+    display: block;
     float: left;
-    min-width: 100px;
-}
+    min-width: 100px; 
+ }
 
 .badge {
     color: white !important;

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- reset browser styles --> 
+    <link rel="assets/stylesheet" type="text/css" media="screen" href="styles/reset.css"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            padding: 25px; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="myDiv">
+        <button id="stopBtn" type="button">stop</button>
+        <button id="nextColor" type="button">next</button>
+    </div>
+
+    <script>
+        var i = 0;
+        var colorArray = ["#FFFFFF", "#FF0000", "#00FF00", "#0000FF", "#00FFFF", "#FF00FF", "#FFFF00", "#000000" ]
+        function callMe() {
+            $("body").fadeIn().css("background-color", colorArray[i])
+            if (i == colorArray.length - 1) {i = 0;} else {i++;};
+            myClock = setTimeout(function() { callMe();}, 5000);
+            // clearTimout(myClock);
+            $("#stopBtn").on("click", function () {
+                clearTimeout(myClock);
+                quit();
+            })
+            $("#nextColor").on("click", function() {
+                if (i == colorArray.length - 1) {
+                    i = 0;
+                }
+                clearTimeout(myClock);
+                callMe();
+            });
+        }
+
+        function quit() {
+            console.log("quitting");
+
+            clearTimeout(myClock)
+        }
+    
+        callMe();
+
+
+    
+    </script>
+
+
+</body>
+</html>

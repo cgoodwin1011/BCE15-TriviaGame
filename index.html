@@ -31,57 +31,59 @@
     <div id="content" class="jumbotron">
       <h1 id="title" class="centerIt">Math Test!</h1>
       <div id="level-selector"></div>
-      <div id="timer-display">Time remaining: 0:<span id="timer">30</span></div>
+      <div id="timer-display">Time remaining:&nbsp;<span id="timer"></span>&nbsp;seconds</div>
       <div class="horizontal-spacer"></div>
       <h2 id="question">Question</h2>
       <h1 id="response"></h1>
       <div id="answerChoices">
         <div class="row">
-          <div id="cell_A_01" class="col-md-6">
-            <button type="button" id="answer-1-btn" class="answer btn btn-primary colA">
+          <div id="cell_A_01" class="grid-cell col-md-6">
+            <button type="button" id="answer-1-btn" class="answer btn btn-primary row00 colA">
               <span class="badge">A</span>&nbsp;&nbsp;
-              <span id="answer1">Answer1</span>
+              <span id="answerA">Answer1</span>
             </button>
           </div>
-          <div id="cell_B_01" class="col-md-6">
-            <button type="button" id="answer-2-btn" class="answer btn btn-primary colB">
+          <div id="cell_B_01" class="grid-cell col-md-6">
+            <button type="button" id="answer-2-btn" class="answer btn btn-primary row00 colB">
               <span class="badge">B</span>&nbsp;&nbsp;
-              <span id="answer2">Answer2</span>
+              <span id="answerB">Answer2</span>
             </button>
           </div>
         </div>
         <div class="row">
-          <div id="cell_A_02" class="col-md-6">
-            <button type="button" id="answer-3-btn" class="answer btn btn-primary colA">
+          <div id="cell_A_02" class="grid-cell col-md-6">
+            <button type="button" id="answer-3-btn" class="answer btn btn-primary row01 colA">
               <span class="badge">C</span>&nbsp;&nbsp;
-              <span id="answer3">Answer3</span>
+              <span id="answerC">Answer3</span>
             </button>
           </div>
-          <div id="cell_B_02" class="col-md-6">
-            <button type="button" id="answer-4-btn" class="answer btn btn-primary colB">
+          <div id="cell_B_02" class="grid-cell col-md-6">
+            <button type="button" id="answer-4-btn" class="answer btn btn-primary row01 colB">
               <span class="badge">D</span>&nbsp;&nbsp;
-              <span id="answer4">Answer4</span>
+              <span id="answerD">Answer4</span>
             </button>
           </div>
         </div>
         <div class="row">
-          <div id="cell_A_03" class="col-md-6">
-            <button type="button" id="play-next" class="control-btn btn btn-success colA">
+          <div id="cell_A_03" class="grid-cell col-md-6">
+            <button type="button" id="play-btn" class="control-btn btn btn-success row02 colA">
               <!-- <span class="badge">C</span>&nbsp;&nbsp; -->
-              <span id="answer3">Play</span>
+              <span id="play-lbl">Play</span>
             </button>
           </div>
-          <div id="cell_B_03" class="col-md-6">
-            <button type="button" id="quit" class="control-btn btn btn-danger colB">
+          <div id="cell_B_03" class="grid-cell col-md-6">
+            <button type="button" id="quit-btn" class="control-btn btn btn-danger row02 colB">
               <!-- <span class="badge">D</span>&nbsp;&nbsp; -->
-              <span id="answer4">Quit</span>
+              <span id="quit-lbl">Quit</span>
             </button>
           </div>
         </div>
       </div>
       <div id="theAnswer"></div>
     </div>
-
+    <footer>
+      All questions borrowed from the National Center for Educational Statistics.  Visit them here <a href=""
+    </footer>
 
   </div>
   <div id="script-calls">
