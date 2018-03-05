@@ -1,3 +1,34 @@
+// function runCountDownTimer() {
+//     var counting = 0;
+//     var countingDown = setTimeout( function() {
+//         if ((questionTime - counting) >= 0) {
+//             $("#timer").text(questionTime - counting);
+//             counting++;
+//         } else {
+//             clearInterval(countingDown);
+//         }
+//     }, questionTime*1000);
+//     return
+// }
+
+// function runCountDownTimer() {
+//     var counting = 0;
+//     console.log("in countdown timer")
+//     while(questionTime - counting >= 0) {
+//         console.log("in while loop")
+//         var countingDown = setTimeout( function() {
+//             if ((questionTime - counting) >= 0) {
+//                 $("#timer").text(questionTime - counting);
+//                 counting++;
+//             } else {
+//                 clearInterval(countingDown);
+//             }
+//             console.log("count down timer running")
+//         }, 1000);
+//     }
+//     return
+// }
+
 
 /*
 function getAnswerClick() {
@@ -20,6 +51,8 @@ function getAnswerClick() {
     });
 }
 */
+
+
 
 
 /*

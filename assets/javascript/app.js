@@ -25,7 +25,6 @@ var cQuestion = {
     correctAnswer: "B",
 }
 
-
 var dQuestion = {
     question: "3, click button A",
     A: "click here",
@@ -34,7 +33,6 @@ var dQuestion = {
     D: "not this......<br>....",
     correctAnswer: "A",
 }
-
 
 var eQuestion = {
     question: "4, what is 16 % 5?",
@@ -52,8 +50,8 @@ var samplePlayer = {
     playerAnswers: [],
 }
 
-var questionTime = 5;
-var showAnswerTime = 3;
+var questionTime = 15;
+var showAnswerTime = 5;
 var myClock;
 
 function Question(newQuestion, ans1, ans2, ans3, ans4, correctAns){
@@ -63,7 +61,6 @@ function Question(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.C = ans3;
     this.D = ans4;
     this.correctAnswer = correctAns;
-
 }
 
 function isAnswerCorrect(currentQuestion, whichButtonClicked) {
@@ -73,7 +70,6 @@ function isAnswerCorrect(currentQuestion, whichButtonClicked) {
         return false;
     }
 }
-
 
 function displayQuestion(thisQuestion) {
     $("#question").html(thisQuestion.question);
@@ -97,7 +93,6 @@ function showCorrectAnswer(inputQuestion, questionId) {
         $("#theAnswer").html("You chose "+questionId+".<br>You're right!<br>The correct answer was "+ answerWas+"<br>");
         $("#theAnswer").append(inputQuestion[answerWas]);
 }
-
 
 function dimAnsButtons() {
     $("#answer-1-btn").prop("disabled", true);
@@ -159,41 +154,27 @@ function outOfTime(inputQuestion) {
     $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
 }
 
-// function runCountDownTimer() {
-//     var counting = 0;
-//     var countingDown = setTimeout( function() {
-//         if ((questionTime - counting) >= 0) {
-//             $("#timer").text(questionTime - counting);
-//             counting++;
-//         } else {
-//             clearInterval(countingDown);
-//         }
-//     }, questionTime*1000);
-//     return
-// }
+// var count=30;
 
-function runCountDownTimer() {
-    var counting = 0;
-    console.log("in countdown timer")
-    while(questionTime - counting >= 0) {
-        console.log("in while loop")
-        var countingDown = setTimeout( function() {
-            if ((questionTime - counting) >= 0) {
-                $("#timer").text(questionTime - counting);
-                counting++;
-            } else {
-                clearInterval(countingDown);
-            }
-            console.log("count down timer running")
-        }, 1000);
-    }
-    return
+var counter=setInterval(runCountDownTimer, 1000); //1000 will  run it every 1 second
+
+function runCountDownTimer(theCount)
+{
+    debugger;
+    theCount--;
+  if (theCount <= 0)
+  {
+     clearInterval(counter);
+     $("#timer").text(0);
+     return;
+  }
+  debugger;
+  $("#timer").text(theCount);
 }
 
 function askQuestions(thisArrayOfQuestions, index, player) {
     noAnswer = true;
-    
-    runCountDownTimer();
+    debugger;
     myClock = setTimeout(function() {
         if (index < thisArrayOfQuestions.length-1) {
             outOfTime(thisArrayOfQuestions[index]);
@@ -204,6 +185,9 @@ function askQuestions(thisArrayOfQuestions, index, player) {
             // resetAfterAnswer(thisArrayOfQuestions, index, player);
         }
     }, 2000);
+    debugger;
+    runCountDownTimer(questionTime);
+
 
     // display the question, a function call!
     displayQuestion(thisArrayOfQuestions[index]);
@@ -275,10 +259,12 @@ function askQuestions(thisArrayOfQuestions, index, player) {
 
 function playGame(sampleQuestionArr, aPlayer) {
     var i = 0;
-
+    console.log("play game")
+    debugger;
     // start button set up
     dimAnsButtons();
     $("#play-btn").on("click", function() {
+        console.log("play was pressed")
         undimAnsButtons();
         $("#play-lbl").text("Next");
         askQuestions(sampleQuestionArr, i, aPlayer);
