@@ -80,3 +80,7 @@ grid-cell {
     background-color: red;
     background-image: none;
 } */
+
+#timer-display {
+    display: none;
+}

@@ -48,10 +48,11 @@ var sampleQuestions = [aQuestion, bQuestion, cQuestion, dQuestion, eQuestion]
 var samplePlayer = {
     playerScore: 0,
     playerAnswers: [],
+    rightAnswers: [],
 }
 
-var questionTime = 15;
-var showAnswerTime = 5;
+var questionTime = 10;
+var showAnswerTime = 3;
 var myClock;
 
 function Question(newQuestion, ans1, ans2, ans3, ans4, correctAns){
@@ -109,28 +110,38 @@ function undimAnsButtons() {
 }
 
 function quit() {
-    console.log("quitting");
-    clearTimeout(myClock);
-    $("#theAnswer").html("<h2>Good Bye!</h2>")
+    if (confirm("Do you really want to quit?")) {
+        doneGame()
+    } 
     //display score... play again
 }
 
-
 function doneGame() {
+    dimAnsButtons();
     clearTimeout(myClock);
+    clearInterval(counter);
     $("#theAnswer").html("<h1>Game Over!</h1>");
+    $("#theAnswer").append("<h1>Good Bye!</h1>")
 }
 
 function resetAfterAnswer(thisArrayOfQuestions, index, player) {
     if (index == thisArrayOfQuestions.length-1) {
+        // times answer display during game end
+        var subClock = setTimeout(function() {
+            doneGame();
+        }, showAnswerTime*1000);
         doneGame();
     } else {
         var subClock = setTimeout( function() {
-            $("#theAnswer").html("Answer Will Display Here");
-            undimAnsButtons();
-            clearTimeout(myClock);
             if (index < thisArrayOfQuestions.length-1) {
+                $("#theAnswer").html("Answer Will Display Here");
+                undimAnsButtons();
+                clearTimeout(myClock);
+                clearInterval(counter);
+                remainingTime = questionTime;
                 askQuestions(thisArrayOfQuestions, index+1, player);
+            } else {
+
             }
         }, showAnswerTime*1000);
     }
@@ -138,13 +149,13 @@ function resetAfterAnswer(thisArrayOfQuestions, index, player) {
 
 function youreRight(theQuestion, letter) {
     var answerWasThis = theQuestion.correctAnswer;
-    $("#theAnswer").html("You chose "+letter+"<br>You're right!");
+    $("#theAnswer").html("<h2>You chose "+letter+"<br>You're right!</h2>");
 }
 
 function youreWrong(theQuestion, letter) {
     var answerShouldBe = theQuestion.correctAnswer;
-    $("#theAnswer").html("You chose "+letter+"<br>You're Wrong, Dude!<br>");
-    $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
+    $("#theAnswer").html("<h2>You chose "+letter+"</h2><br><h1>You're Wrong, Dude!</h1><br>");
+    $("#theAnswer").append("<h1><span style='color: red'>The right answer is "+answerShouldBe+"</span></h1>");
 }
 
 function outOfTime(inputQuestion) {
@@ -154,52 +165,49 @@ function outOfTime(inputQuestion) {
     $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
 }
 
-// var count=30;
-
-var counter=setInterval(runCountDownTimer, 1000); //1000 will  run it every 1 second
-
-function runCountDownTimer(theCount)
-{
-    debugger;
-    theCount--;
-  if (theCount <= 0)
-  {
-     clearInterval(counter);
-     $("#timer").text(0);
-     return;
-  }
-  debugger;
-  $("#timer").text(theCount);
-}
+var remainingTime = questionTime;
+var counter
 
 function askQuestions(thisArrayOfQuestions, index, player) {
-    noAnswer = true;
-    debugger;
+    // display timer
+    var theCount = questionTime;
+    counter = setInterval( function() {
+        if (theCount <= 0)
+        {
+            clearInterval(counter);
+            remainingTime = questionTime;
+            $("#timer").text(0);
+            return;
+        }
+        $("#timer").text(theCount);
+        theCount--;
+    }, 1000);
+    
+    // question timer
     myClock = setTimeout(function() {
+        outOfTime(thisArrayOfQuestions[index]);
         if (index < thisArrayOfQuestions.length-1) {
-            outOfTime(thisArrayOfQuestions[index]);
             resetAfterAnswer(thisArrayOfQuestions, index, player);
         } else {
-            outOfTime(thisArrayOfQuestions[index]);
             doneGame();
-            // resetAfterAnswer(thisArrayOfQuestions, index, player);
         }
-    }, 2000);
-    debugger;
-    runCountDownTimer(questionTime);
-
+    }, questionTime*1000);
 
     // display the question, a function call!
     displayQuestion(thisArrayOfQuestions[index]);
 
     $("#quit-btn").on("click", function () {
         clearTimeout(myClock);
+        clearInterval(counter);
+        remainingTime = questionTime;
         quit();
     })
 
     $("#play-btn").on("click", function() {
         console.log("clicked play");
         clearTimeout(myClock);
+        clearInterval(counter);
+        // remainingTime = questionTime;
         if (index < thisArrayOfQuestions.length-1) {
             outOfTime(thisArrayOfQuestions[index]);
             resetAfterAnswer(thisArrayOfQuestions, index, player);
@@ -211,6 +219,8 @@ function askQuestions(thisArrayOfQuestions, index, player) {
 
     $("#answer-1-btn").on("click", function() {
         clearTimeout(myClock);
+        clearInterval(counter);
+        remainingTime = questionTime;
         dimAnsButtons();
         if (isAnswerCorrect(thisArrayOfQuestions[index], "A")) {
             youreRight(thisArrayOfQuestions[index], "A");
@@ -223,6 +233,8 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     $("#answer-2-btn").on("click", function() {
         console.log("clicked B");
         clearTimeout(myClock);
+        clearInterval(counter);
+        remainingTime = questionTime;
         dimAnsButtons();
             if (isAnswerCorrect(thisArrayOfQuestions[index], "B")) {
                 youreRight(thisArrayOfQuestions[index], "B");
@@ -235,6 +247,8 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     $("#answer-3-btn").on("click", function() {
             console.log("clicked C");
         clearTimeout(myClock);
+        clearInterval(counter);
+        remainingTime = questionTime;
         dimAnsButtons();
         if (isAnswerCorrect(thisArrayOfQuestions[index], "C")) {
             youreRight(thisArrayOfQuestions[index], "C");
@@ -247,6 +261,8 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     $("#answer-4-btn").on("click", function() {
         console.log("clicked D");
         clearTimeout(myClock);
+        clearInterval(counter);
+        remainingTime = questionTime;
         dimAnsButtons();
         if (isAnswerCorrect(thisArrayOfQuestions[index], "D")) {
             youreRight(thisArrayOfQuestions[index], "D");
@@ -260,17 +276,36 @@ function askQuestions(thisArrayOfQuestions, index, player) {
 function playGame(sampleQuestionArr, aPlayer) {
     var i = 0;
     console.log("play game")
-    debugger;
+    // debugger;
     // start button set up
     dimAnsButtons();
     $("#play-btn").on("click", function() {
+        $("#instructions-to-player").hide();
+        $("#timer-display").show();
         console.log("play was pressed")
         undimAnsButtons();
         $("#play-lbl").text("Next");
+        // remainingTime = questionTime;
         askQuestions(sampleQuestionArr, i, aPlayer);
     });
     $("#quit-btn").on("click", function() {
-
+        doneGame();
     });
 
 }
+
+
+// var count=30;
+
+
+// function runCountDownTimer(theCount){
+//     if (theCount <= 0)
+//     {
+//         clearInterval(counter);
+//         remainingTime = questionTime;
+//         $("#timer").text(0);
+//         return;
+//     }
+//     $("#timer").text(theCount);
+//     theCount--;
+// }
