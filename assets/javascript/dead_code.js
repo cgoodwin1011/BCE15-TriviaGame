@@ -1,3 +1,25 @@
+// $("#quit-btn").on("click", function() {
+    //     clearTimeout(myClock);
+    //     clearInterval(counter);
+    //     remainingTime = questionTime;
+    //     console.log('final Q button loop')
+    //     quit();
+    // });
+
+// var count=30;
+
+// function runCountDownTimer(theCount){
+//     if (theCount <= 0)
+//     {
+//         clearInterval(counter);
+//         remainingTime = questionTime;
+//         $("#timer").text(0);
+//         return;
+//     }
+//     $("#timer").text(theCount);
+//     theCount--;
+// }
+
 // function runCountDownTimer() {
 //     var counting = 0;
 //     var countingDown = setTimeout( function() {

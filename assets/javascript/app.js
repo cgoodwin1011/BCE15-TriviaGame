@@ -47,15 +47,17 @@ var sampleQuestions = [aQuestion, bQuestion, cQuestion, dQuestion, eQuestion]
 
 var samplePlayer = {
     playerScore: 0,
+    playerRight: 0,
+    playerWrong: 0,
     playerAnswers: [],
     rightAnswers: [],
 }
 
 var questionTime = 10;
-var showAnswerTime = 3;
+var showAnswerTime = 1;
 var myClock;
 
-function Question(newQuestion, ans1, ans2, ans3, ans4, correctAns){
+function makeQuestion(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.question = newQuestion;
     this.A = ans1;
     this.B = ans2;
@@ -89,11 +91,11 @@ function nextQExist(arrayOfQuestions, index) {
     }
 }
 
-function showCorrectAnswer(inputQuestion, questionId) {
-        answerWas = inputQuestion.correctAnswer;
-        $("#theAnswer").html("You chose "+questionId+".<br>You're right!<br>The correct answer was "+ answerWas+"<br>");
-        $("#theAnswer").append(inputQuestion[answerWas]);
-}
+// function showCorrectAnswer(inputQuestion, questionId) {
+//         answerWas = inputQuestion.correctAnswer;
+//         $("#theAnswer").html("You chose "+questionId+".<br>You're right!<br>The correct answer was "+ answerWas+"<br>");
+//         $("#theAnswer").append(inputQuestion[answerWas]);
+// }
 
 function dimAnsButtons() {
     $("#answer-1-btn").prop("disabled", true);
@@ -109,15 +111,38 @@ function undimAnsButtons() {
     $("#answer-4-btn").prop("disabled", false);
 }
 
+function dimQuit() {
+    $("#quit-btn").prop("disabled", true);
+}
+
+function undimQuit() {
+    $("#quit-btn").prop("disabled", false);
+}
+
+
+function dimAllButtons() {
+    dimAnsButtons();
+    $("#play-btn").prop("disabled", true);
+    $("#quit-btn").prop("disabled", true);
+}
+
+function undimAllButtons() {
+    undimAnsButtons();
+    $("#play-btn").prop("disabled", false);
+    $("#quit-btn").prop("disabled", false);
+}
+
 function quit() {
+    for (i=0; i<10000; i++) {};
     if (confirm("Do you really want to quit?")) {
-        doneGame()
+        doneGame();
     } 
-    //display score... play again
+    //display score...  resume game
 }
 
 function doneGame() {
     dimAnsButtons();
+    dimQuit();
     clearTimeout(myClock);
     clearInterval(counter);
     $("#theAnswer").html("<h1>Game Over!</h1>");
@@ -126,7 +151,7 @@ function doneGame() {
 
 function resetAfterAnswer(thisArrayOfQuestions, index, player) {
     if (index == thisArrayOfQuestions.length-1) {
-        // times answer display during game end
+        // timed display of answer  during game end
         var subClock = setTimeout(function() {
             doneGame();
         }, showAnswerTime*1000);
@@ -147,15 +172,35 @@ function resetAfterAnswer(thisArrayOfQuestions, index, player) {
     }
 }
 
+function updatePlayer(updQuestion, curLetter, wasRight, thePlayer = 'samplePlayer') {
+    thePlayer.playerAnswers[thePlayer.playerAnswers.length] = curLetter;
+    if (wasRight) {
+        thePlayer.playerScore++;
+        thePlayer.playerRight++;
+        thePlayer.rightAnswers[thePlayer.playerAnswers.length] = curLetter;
+    } else {
+        var answerShouldBe = updQuestion.correctAnswer;
+        thePlayer.playerScore--;
+        thePlayer.playerWrong++;
+        thePlayer.rightAnswers[thePlayer.playerAnswers.length] = answerShouldBe;
+    }
+}
+
+function displayPlayerStats(thePlayer) {
+
+}
+
 function youreRight(theQuestion, letter) {
     var answerWasThis = theQuestion.correctAnswer;
     $("#theAnswer").html("<h2>You chose "+letter+"<br>You're right!</h2>");
+    updatePlayer(theQuestion, letter, true, samplePlayer);
 }
 
 function youreWrong(theQuestion, letter) {
     var answerShouldBe = theQuestion.correctAnswer;
     $("#theAnswer").html("<h2>You chose "+letter+"</h2><br><h1>You're Wrong, Dude!</h1><br>");
     $("#theAnswer").append("<h1><span style='color: red'>The right answer is "+answerShouldBe+"</span></h1>");
+    updatePlayer(theQuestion, letter, false, samplePlayer);
 }
 
 function outOfTime(inputQuestion) {
@@ -163,6 +208,7 @@ function outOfTime(inputQuestion) {
     answerWas = inputQuestion.correctAnswer;
     $("#theAnswer").html("You made no choice.<br>The correct answer was "+answerWas+"<br>");
     $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
+    updatePlayer(inputQuestion, ' ', false, samplePlayer);
 }
 
 var remainingTime = questionTime;
@@ -189,6 +235,7 @@ function askQuestions(thisArrayOfQuestions, index, player) {
         if (index < thisArrayOfQuestions.length-1) {
             resetAfterAnswer(thisArrayOfQuestions, index, player);
         } else {
+            resetAfterAnswer(thisArrayOfQuestions, index, player);
             doneGame();
         }
     }, questionTime*1000);
@@ -204,15 +251,13 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     })
 
     $("#play-btn").on("click", function() {
-        console.log("clicked play");
         clearTimeout(myClock);
         clearInterval(counter);
-        // remainingTime = questionTime;
         if (index < thisArrayOfQuestions.length-1) {
-            outOfTime(thisArrayOfQuestions[index]);
+            // outOfTime(thisArrayOfQuestions[index]);
             resetAfterAnswer(thisArrayOfQuestions, index, player);
         } else {
-            outOfTime(thisArrayOfQuestions[index]);
+            // outOfTime(thisArrayOfQuestions[index]);
             doneGame();
         }
     });
@@ -231,7 +276,6 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     })
 
     $("#answer-2-btn").on("click", function() {
-        console.log("clicked B");
         clearTimeout(myClock);
         clearInterval(counter);
         remainingTime = questionTime;
@@ -245,7 +289,6 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     })
 
     $("#answer-3-btn").on("click", function() {
-            console.log("clicked C");
         clearTimeout(myClock);
         clearInterval(counter);
         remainingTime = questionTime;
@@ -259,7 +302,6 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     })
 
     $("#answer-4-btn").on("click", function() {
-        console.log("clicked D");
         clearTimeout(myClock);
         clearInterval(counter);
         remainingTime = questionTime;
@@ -275,37 +317,22 @@ function askQuestions(thisArrayOfQuestions, index, player) {
 
 function playGame(sampleQuestionArr, aPlayer) {
     var i = 0;
-    console.log("play game")
-    // debugger;
+
     // start button set up
     dimAnsButtons();
+    dimQuit();
+    $("#timer-display").hide();
+    $("#question").hide();
     $("#play-btn").on("click", function() {
         $("#instructions-to-player").hide();
         $("#timer-display").show();
-        console.log("play was pressed")
         undimAnsButtons();
+        undimQuit();
+        $("#question").show();
         $("#play-lbl").text("Next");
         // remainingTime = questionTime;
         askQuestions(sampleQuestionArr, i, aPlayer);
     });
-    $("#quit-btn").on("click", function() {
-        doneGame();
-    });
 
 }
 
-
-// var count=30;
-
-
-// function runCountDownTimer(theCount){
-//     if (theCount <= 0)
-//     {
-//         clearInterval(counter);
-//         remainingTime = questionTime;
-//         $("#timer").text(0);
-//         return;
-//     }
-//     $("#timer").text(theCount);
-//     theCount--;
-// }

@@ -30,14 +30,19 @@
     </header>
     <div id="content" class="jumbotron">
       <h1 id="title" class="centerIt">Math Test!</h1>
-      <div id="game-controls"></div>
-      <h2 id="instructions-to-player">Press play to start timed quiz</h2>
-      <h2 id="timer-display">Time remaining:<br><span id="timer"></span>&nbsp;seconds</h2>
-      <div class="horizontal-spacer"></div>
-      <h2 id="question">Question</h2>
-      <h1 id="response"></h1>
+      <h2 id="slogan" class="centerIt">Are you smart enough for 4th grade?</h2>
+      <div id="game-controls"></div>      
+      <!-- <div class="horizontal-spacer"></div> -->
+      <!-- <h1 id="response"></h1> -->
       <div id="answerChoices">
-        <div class="row">
+        <div class="row" id="row00">
+          <div class="col-md-12"><h2 id="instructions-to-player">Press play to start timed quiz</h2><h2 id="timer-display">Time remaining:<br><span id="timer"></span>&nbsp;seconds</h2>
+          </div>
+        <div class="row" id="row01">
+         <div class="col-md-12">
+            <h2 id="question">Question</h2>
+         </div>
+        <div class="row" id="row02">
           <div id="cell_A_01" class="grid-cell col-md-6">
             <button type="button" id="answer-1-btn" class="answer btn btn-primary row00 colA">
               <span class="badge">A</span>&nbsp;&nbsp;
@@ -51,7 +56,7 @@
             </button>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id="row03">
           <div id="cell_A_02" class="grid-cell col-md-6">
             <button type="button" id="answer-3-btn" class="answer btn btn-primary row01 colA">
               <span class="badge">C</span>&nbsp;&nbsp;
@@ -65,7 +70,7 @@
             </button>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id="row04">
           <div id="cell_A_03" class="grid-cell col-md-6">
             <button type="button" id="play-btn" class="control-btn btn btn-success row02 colA">
               <!-- <span class="badge">C</span>&nbsp;&nbsp; -->
@@ -78,6 +83,12 @@
               <span id="quit-lbl">Quit</span>
             </button>
           </div>
+        </div>
+        <div class="row" id="row05">
+
+        </div>
+        <div class="row" id="row06">
+          
         </div>
       </div>
       <div id="theAnswer"></div>
