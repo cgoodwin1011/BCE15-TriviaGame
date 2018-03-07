@@ -1,61 +1,60 @@
 var aQuestion = {
-    question: "0, what is 2 * 5?",
+    question: "What is 2 * 5?",
     A: "12",
     B: "9",
     C: "15",
     D: "10",
     correctAnswer: "D",
+    explainer: "2 x 5 = 10",
 }
 
 var bQuestion = {
-    question: "1, what is 7 - 8?",
+    question: "What is 7 - 8?",
     A: "-2",
     B: "1",
     C: "-1",
     D: "0",
     correctAnswer: "C",
+    explainer: "7- 8 = -1",
 }
 
 var cQuestion = {
-    question: "2, what is 16/8?",
+    question: "What is 16/8?",
     A: "-2",
     B: "2",
     C: "-1",
     D: "0",
     correctAnswer: "B",
+    explainer: "16/8 = 2",
 }
 
 var dQuestion = {
-    question: "3, click button A",
+    question: "Click button A",
     A: "click here",
     B: "not here",
     C: "nor here",
     D: "not this......<br>....",
     correctAnswer: "A",
+    explainer: "It said click button A",
 }
 
 var eQuestion = {
-    question: "4, what is 16 % 5?",
+    question: "What is 16 % 5?",
     A: "-2",
     B: "1",
     C: "-1",
     D: "0",
     correctAnswer: "B",
+    explainer: "The remainder of 5 into 16 is 1",
 }
 
 var sampleQuestions = [aQuestion, bQuestion, cQuestion, dQuestion, eQuestion]
 
-var samplePlayer = {
-    playerScore: 0,
-    playerRight: 0,
-    playerWrong: 0,
-    playerAnswers: [],
-    rightAnswers: [],
-}
 
 var questionTime = 10;
 var showAnswerTime = 1;
-var myClock;
+var myClockGlobal;
+var myCounterGlobal;
 
 function makeQuestion(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.question = newQuestion;
@@ -66,8 +65,8 @@ function makeQuestion(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.correctAnswer = correctAns;
 }
 
-function isAnswerCorrect(currentQuestion, whichButtonClicked) {
-    if (whichButtonClicked == currentQuestion.correctAnswer) {
+function isAnswerCorrect(currentQuestionArray, index, whichButtonClicked) {
+    if (whichButtonClicked == currentQuestionArray[index].correctAnswer) {
         return true;
     } else {
         return false;
@@ -119,7 +118,6 @@ function undimQuit() {
     $("#quit-btn").prop("disabled", false);
 }
 
-
 function dimAllButtons() {
     dimAnsButtons();
     $("#play-btn").prop("disabled", true);
@@ -133,46 +131,45 @@ function undimAllButtons() {
 }
 
 function quit() {
-    for (i=0; i<10000; i++) {};
     if (confirm("Do you really want to quit?")) {
         doneGame();
     } 
-    //display score...  resume game
 }
 
 function doneGame() {
     dimAnsButtons();
     dimQuit();
-    clearTimeout(myClock);
-    clearInterval(counter);
+    stopClock();
+    $("#timer-display").hide();
+    $("#instructions-to-player").show();
+    $("#play-lbl").text("Play Again?");
     $("#theAnswer").html("<h1>Game Over!</h1>");
-    $("#theAnswer").append("<h1>Good Bye!</h1>")
+    $("#theAnswer").append("<h1>Good Bye!</h1>");
 }
 
 function resetAfterAnswer(thisArrayOfQuestions, index, player) {
-    if (index == thisArrayOfQuestions.length-1) {
-        // timed display of answer  during game end
+    stopClock();
+    if (nextQExist(thisArrayOfQuestions, index)) {
+        var subClock = setTimeout( function() {
+            $("#theAnswer").html("Answer Will Display Here");
+            undimAnsButtons();
+            askQuestions(thisArrayOfQuestions, index+1, player);
+            // doneGame();
+        }, showAnswerTime*1000);
+        console.log("something wrong in resetAfterAnswer");
+    } else {
         var subClock = setTimeout(function() {
             doneGame();
-        }, showAnswerTime*1000);
-        doneGame();
-    } else {
-        var subClock = setTimeout( function() {
-            if (index < thisArrayOfQuestions.length-1) {
-                $("#theAnswer").html("Answer Will Display Here");
-                undimAnsButtons();
-                clearTimeout(myClock);
-                clearInterval(counter);
-                remainingTime = questionTime;
-                askQuestions(thisArrayOfQuestions, index+1, player);
-            } else {
-
-            }
         }, showAnswerTime*1000);
     }
 }
 
-function updatePlayer(updQuestion, curLetter, wasRight, thePlayer = 'samplePlayer') {
+function showAnswer(thisArrayOfQuestions, index) {
+    var answerShouldBe = thisArrayOfQuestions[index].correctAnswer;
+    $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
+}
+
+function updatePlayer(updQuestion, curLetter, wasRight, thePlayer) {
     thePlayer.playerAnswers[thePlayer.playerAnswers.length] = curLetter;
     if (wasRight) {
         thePlayer.playerScore++;
@@ -187,52 +184,64 @@ function updatePlayer(updQuestion, curLetter, wasRight, thePlayer = 'samplePlaye
 }
 
 function displayPlayerStats(thePlayer) {
-
 }
 
-function youreRight(theQuestion, letter) {
-    var answerWasThis = theQuestion.correctAnswer;
+function evalAnswer(thisArrayOfQuestions, index, letterChosen, somePlayer) {
+    if (isAnswerCorrect(thisArrayOfQuestions, index, letterChosen)) {
+        youreRight(thisArrayOfQuestions, index, letterChosen, somePlayer);
+    } else {
+        youreWrong(thisArrayOfQuestions, index, letterChosen, somePlayer);
+    };
+    // resetAfterAnswer(thisArrayOfQuestions, index, player);
+}
+
+function youreRight(theQuestions, index, letter, inPlayer) {
+    console.log("right answer");
+    var answerWasThis = theQuestions[index].correctAnswer;
     $("#theAnswer").html("<h2>You chose "+letter+"<br>You're right!</h2>");
-    updatePlayer(theQuestion, letter, true, samplePlayer);
+    showAnswer(theQuestions, index)
+    updatePlayer(theQuestions[index], letter, true, inPlayer);
 }
 
-function youreWrong(theQuestion, letter) {
-    var answerShouldBe = theQuestion.correctAnswer;
+function youreWrong(theQuestions, index, letter, inPlayer) {
+    console.log("wrong answer");
+    var answerShouldBe = theQuestions[index].correctAnswer;
     $("#theAnswer").html("<h2>You chose "+letter+"</h2><br><h1>You're Wrong, Dude!</h1><br>");
-    $("#theAnswer").append("<h1><span style='color: red'>The right answer is "+answerShouldBe+"</span></h1>");
-    updatePlayer(theQuestion, letter, false, samplePlayer);
+    showAnswer(theQuestions, index)
+    updatePlayer(theQuestions[index], letter, false, inPlayer);
 }
 
-function outOfTime(inputQuestion) {
-    var answerShouldBe = inputQuestion.correctAnswer;
-    answerWas = inputQuestion.correctAnswer;
-    $("#theAnswer").html("You made no choice.<br>The correct answer was "+answerWas+"<br>");
-    $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
-    updatePlayer(inputQuestion, ' ', false, samplePlayer);
+function outOfTime(inputQuestions, index, inPlayer) {
+    console.log("no answer");
+    var answerShouldBe = inputQuestions[index].correctAnswer;
+    $("#theAnswer").html("You made no choice.<br>The correct answer was "+answerShouldBe+"<br>");
+    showAnswer(inputQuestions, index);
+    updatePlayer(inputQuestions, ' ', false, inPlayer);
 }
 
-var remainingTime = questionTime;
-var counter
+function stopClock() {
+    clearTimeout(myClockGlobal);
+    clearInterval(myCounterGlobal);
+}
 
 function askQuestions(thisArrayOfQuestions, index, player) {
     // display timer
     var theCount = questionTime;
-    counter = setInterval( function() {
+    myCounterGlobal = setInterval( function() {
         if (theCount <= 0)
         {
-            clearInterval(counter);
-            remainingTime = questionTime;
+            clearInterval(myClockGlobal);
+            // remainingTime = questionTime;
             $("#timer").text(0);
             return;
         }
         $("#timer").text(theCount);
         theCount--;
     }, 1000);
-    
-    // question timer
-    myClock = setTimeout(function() {
-        outOfTime(thisArrayOfQuestions[index]);
-        if (index < thisArrayOfQuestions.length-1) {
+
+    myClockGlobal = setTimeout(function() {
+        outOfTime(thisArrayOfQuestions, index, player);
+        if (nextQExist(thisArrayOfQuestions, index)) {
             resetAfterAnswer(thisArrayOfQuestions, index, player);
         } else {
             resetAfterAnswer(thisArrayOfQuestions, index, player);
@@ -244,75 +253,75 @@ function askQuestions(thisArrayOfQuestions, index, player) {
     displayQuestion(thisArrayOfQuestions[index]);
 
     $("#quit-btn").on("click", function () {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        remainingTime = questionTime;
+        stopClock();
         quit();
-    })
+    });
 
     $("#play-btn").on("click", function() {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        if (index < thisArrayOfQuestions.length-1) {
-            // outOfTime(thisArrayOfQuestions[index]);
-            resetAfterAnswer(thisArrayOfQuestions, index, player);
-        } else {
-            // outOfTime(thisArrayOfQuestions[index]);
-            doneGame();
-        }
+        playBtnClick(thisArrayOfQuestions, index, player);
     });
 
     $("#answer-1-btn").on("click", function() {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        remainingTime = questionTime;
+        stopClock();
         dimAnsButtons();
-        if (isAnswerCorrect(thisArrayOfQuestions[index], "A")) {
-            youreRight(thisArrayOfQuestions[index], "A");
-        } else {
-            youreWrong(thisArrayOfQuestions[index], "A")
-        };
+        evalAnswer(thisArrayOfQuestions, index, "A", player);
         resetAfterAnswer(thisArrayOfQuestions, index, player);
-    })
+    });
 
     $("#answer-2-btn").on("click", function() {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        remainingTime = questionTime;
+        stopClock();
         dimAnsButtons();
-            if (isAnswerCorrect(thisArrayOfQuestions[index], "B")) {
-                youreRight(thisArrayOfQuestions[index], "B");
-            } else {
-                youreWrong(thisArrayOfQuestions[index], "B")
-        };
+        evalAnswer(thisArrayOfQuestions, index, "B", player);
         resetAfterAnswer(thisArrayOfQuestions, index, player);
-    })
+    });
 
     $("#answer-3-btn").on("click", function() {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        remainingTime = questionTime;
+        stopClock();
         dimAnsButtons();
-        if (isAnswerCorrect(thisArrayOfQuestions[index], "C")) {
-            youreRight(thisArrayOfQuestions[index], "C");
-        } else {
-            youreWrong(thisArrayOfQuestions[index], "C")
-        };
+        evalAnswer(thisArrayOfQuestions, index, "C", player);
         resetAfterAnswer(thisArrayOfQuestions, index, player);
-    })
+    });
 
     $("#answer-4-btn").on("click", function() {
-        clearTimeout(myClock);
-        clearInterval(counter);
-        remainingTime = questionTime;
+        stopClock();
         dimAnsButtons();
-        if (isAnswerCorrect(thisArrayOfQuestions[index], "D")) {
-            youreRight(thisArrayOfQuestions[index], "D");
-        } else {
-            youreWrong(thisArrayOfQuestions[index], "D")
-        };
+        evalAnswer(thisArrayOfQuestions, index, "D", player);
         resetAfterAnswer(thisArrayOfQuestions, index, player);
-    })
+    });
+}
+
+
+
+function playBtnClick(arrayOfQuestions, index, aPlayer) {
+    var btnStatus = $("#play-lbl").html();
+    switch(btnStatus) {
+        case "Play":
+            index = 0;
+            console.log("you clicked Play!");
+            $("#instructions-to-player").hide();
+            $("#timer-display").show();
+            undimAnsButtons();
+            undimQuit();
+            $("#question").show();
+            $("#play-lbl").text("Next");
+            break;
+        case "Next":
+            console.log("you clicked Next!");
+            stopClock();
+            evalAnswer(arrayOfQuestions, index, " ", aPlayer);
+            if (nextQExist(arrayOfQuestions, index)) {
+                resetAfterAnswer(arrayOfQuestions, index, aPlayer);
+            } else {
+                doneGame();
+            }
+            break;
+        case "Play Again?":
+            location.reload();
+            // $("body").html("<h1>Not Yet Implemented</h1>")
+            break;
+        default:
+            console.log("something's not working in playBtnClick")
+    }
 }
 
 function playGame(sampleQuestionArr, aPlayer) {
@@ -324,14 +333,8 @@ function playGame(sampleQuestionArr, aPlayer) {
     $("#timer-display").hide();
     $("#question").hide();
     $("#play-btn").on("click", function() {
-        $("#instructions-to-player").hide();
-        $("#timer-display").show();
-        undimAnsButtons();
-        undimQuit();
-        $("#question").show();
-        $("#play-lbl").text("Next");
-        // remainingTime = questionTime;
-        askQuestions(sampleQuestionArr, i, aPlayer);
+        playBtnClick(sampleQuestionArr, 0, aPlayer);
+        askQuestions(sampleQuestionArr, 0, aPlayer);
     });
 
 }

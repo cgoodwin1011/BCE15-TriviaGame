@@ -36,8 +36,9 @@
       <!-- <h1 id="response"></h1> -->
       <div id="answerChoices">
         <div class="row" id="row00">
-          <div class="col-md-12"><h2 id="instructions-to-player">Press play to start timed quiz</h2><h2 id="timer-display">Time remaining:<br><span id="timer"></span>&nbsp;seconds</h2>
-          </div>
+          <!-- <div class="col-md-12"> -->
+            <h2 id="instructions-to-player">Press play to start timed quiz</h2><h2 id="timer-display">Time remaining:<br><span id="timer"></span>&nbsp;seconds</h2>
+          <!-- </div> -->
         <div class="row" id="row01">
          <div class="col-md-12">
             <h2 id="question">Question</h2>
@@ -101,9 +102,14 @@
   <div id="script-calls">
     <script>
       var aSamplePlayer = {
-          playerScore: 0,
-          playerAnswers: [],
+        playerScore: 0,
+        playerRight: 0,
+        playerWrong: 0,
+        playerAnswers: [],
+        rightAnswers: [],
       }
+
+      
       playGame(sampleQuestions, aSamplePlayer);
     </script>
   </div>
