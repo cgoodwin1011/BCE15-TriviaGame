@@ -37,34 +37,46 @@
       <div id="answerChoices">
         <div class="row" id="row00">
           <!-- <div class="col-md-12"> -->
-            <h2 id="instructions-to-player">Press play to start timed quiz</h2><h2 id="timer-display">Time remaining:<br><span id="timer"></span>&nbsp;seconds</h2>
+            <p id="instructions-to-player">Press play to start timed quiz</p>
+            <p id="question">Question</p>
+          </div>
+          <div class="row" id="rowA">  
+            <p id="the-answer"></p>
+            <p id="timer-display">Time remaining:<br>
+                <span id="timer-number"></span>&nbsp;seconds
+            </p>
+            <p id="game-over"></p>
+            <img id="the-image" src="assets/images/good-outcomes/alan-turing-9512017-1-402.jpg">
+        </div>
+        <div class="row" id="rowStats">
+        </div>
           <!-- </div> -->
         <div class="row" id="row01">
          <div class="col-md-12">
-            <h2 id="question">Question</h2>
          </div>
-        <div class="row" id="row02">
-          <div id="cell_A_01" class="grid-cell col-md-6">
+         <div class="row" id="row02">
+          <div id="cell_A_01" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="answer-1-btn" class="answer btn btn-primary row00 colA">
               <span class="badge">A</span>&nbsp;&nbsp;
               <span id="answerA">Answer1</span>
             </button>
           </div>
-          <div id="cell_B_01" class="grid-cell col-md-6">
+          <div id="cell_B_01" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="answer-2-btn" class="answer btn btn-primary row00 colB">
               <span class="badge">B</span>&nbsp;&nbsp;
               <span id="answerB">Answer2</span>
             </button>
           </div>
         </div>
+        </div>
         <div class="row" id="row03">
-          <div id="cell_A_02" class="grid-cell col-md-6">
+          <div id="cell_A_02" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="answer-3-btn" class="answer btn btn-primary row01 colA">
               <span class="badge">C</span>&nbsp;&nbsp;
               <span id="answerC">Answer3</span>
             </button>
           </div>
-          <div id="cell_B_02" class="grid-cell col-md-6">
+          <div id="cell_B_02" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="answer-4-btn" class="answer btn btn-primary row01 colB">
               <span class="badge">D</span>&nbsp;&nbsp;
               <span id="answerD">Answer4</span>
@@ -72,13 +84,13 @@
           </div>
         </div>
         <div class="row" id="row04">
-          <div id="cell_A_03" class="grid-cell col-md-6">
+          <div id="cell_A_03" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="play-btn" class="control-btn btn btn-success row02 colA">
               <!-- <span class="badge">C</span>&nbsp;&nbsp; -->
               <span id="play-lbl">Play</span>
             </button>
           </div>
-          <div id="cell_B_03" class="grid-cell col-md-6">
+          <div id="cell_B_03" class="grid-cell col-md-6 col-sm-6">
             <button type="button" id="quit-btn" class="control-btn btn btn-danger row02 colB">
               <!-- <span class="badge">D</span>&nbsp;&nbsp; -->
               <span id="quit-lbl">Quit</span>
@@ -92,16 +104,15 @@
           
         </div>
       </div>
-      <div id="theAnswer"></div>
+      <div id="the-bottom-answer"></div>
     </div>
-    <footer>
-      All questions borrowed from the National Center for Educational Statistics.  Visit them here <a href="">*******</a>
-    </footer>
-
   </div>
+  <footer>
+    All questions borrowed from the National Center for Educational Statistics.  Visit them here <a href="">*******</a>
+  </footer>
   <div id="script-calls">
     <script>
-      var aSamplePlayer = {
+      var mySamplePlayer = {
         playerScore: 0,
         playerRight: 0,
         playerWrong: 0,
@@ -110,7 +121,7 @@
       }
 
       
-      playGame(sampleQuestions, aSamplePlayer);
+      playGame(sampleQuestions, mySamplePlayer);
     </script>
   </div>
 

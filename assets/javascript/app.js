@@ -1,3 +1,7 @@
+var badPic = ["assets/images/bad-outcomes/4wx8EcIA.jpg", "images/bad-outcomes/10-3-stooges.jpg", "images/bad-outcomes/dumbanddumber.jpeg"]
+var goodPic = ["assets/images/good-outcomes/alan-turing-9512017-1-402.jpg", "assets/images/good-outcomes/Albert_Einstein_Head.jpg", "assets/images/good-outcomes/euler.jpg"]
+var noPic = '';
+
 var aQuestion = {
     question: "What is 2 * 5?",
     A: "12",
@@ -6,7 +10,7 @@ var aQuestion = {
     D: "10",
     correctAnswer: "D",
     explainer: "2 x 5 = 10",
-}
+};
 
 var bQuestion = {
     question: "What is 7 - 8?",
@@ -16,7 +20,7 @@ var bQuestion = {
     D: "0",
     correctAnswer: "C",
     explainer: "7- 8 = -1",
-}
+};
 
 var cQuestion = {
     question: "What is 16/8?",
@@ -26,7 +30,7 @@ var cQuestion = {
     D: "0",
     correctAnswer: "B",
     explainer: "16/8 = 2",
-}
+};
 
 var dQuestion = {
     question: "Click button A",
@@ -36,7 +40,7 @@ var dQuestion = {
     D: "not this......<br>....",
     correctAnswer: "A",
     explainer: "It said click button A",
-}
+};
 
 var eQuestion = {
     question: "What is 16 % 5?",
@@ -46,15 +50,9 @@ var eQuestion = {
     D: "0",
     correctAnswer: "B",
     explainer: "The remainder of 5 into 16 is 1",
-}
+};
 
 var sampleQuestions = [aQuestion, bQuestion, cQuestion, dQuestion, eQuestion]
-
-
-var questionTime = 10;
-var showAnswerTime = 1;
-var myClockGlobal;
-var myCounterGlobal;
 
 function makeQuestion(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.question = newQuestion;
@@ -65,277 +63,376 @@ function makeQuestion(newQuestion, ans1, ans2, ans3, ans4, correctAns){
     this.correctAnswer = correctAns;
 }
 
-function isAnswerCorrect(currentQuestionArray, index, whichButtonClicked) {
-    if (whichButtonClicked == currentQuestionArray[index].correctAnswer) {
-        return true;
-    } else {
-        return false;
-    }
+var myGlobalTime;
+var questionTime = 5;
+var showAnswerTime = 3;
+
+
+function playGame(sampleQuestionArr, aPlayer) {
+    // console.log("playGame");
+    var i = -1;
+    disableAnsButtons();
+    disableQuit();
+    $("#timer-display").hide();
+    $("#question").hide();
+    $("#play-btn").on("click", function() {
+        startGame(sampleQuestionArr, i, aPlayer);
+    });
+
 }
 
-function displayQuestion(thisQuestion) {
-    $("#question").html(thisQuestion.question);
-    $("#answerA").html(thisQuestion.A);
-    $("#answerB").html(thisQuestion.B);
-    $("#answerC").html(thisQuestion.C);
-    $("#answerD").html(thisQuestion.D);
-    $("#correctAnswer").html(thisQuestion.correctAns);
-}
-
-function nextQExist(arrayOfQuestions, index) {
-    if (index < arrayOfQuestions.length-1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// function showCorrectAnswer(inputQuestion, questionId) {
-//         answerWas = inputQuestion.correctAnswer;
-//         $("#theAnswer").html("You chose "+questionId+".<br>You're right!<br>The correct answer was "+ answerWas+"<br>");
-//         $("#theAnswer").append(inputQuestion[answerWas]);
-// }
-
-function dimAnsButtons() {
+function disableAnsButtons() {
     $("#answer-1-btn").prop("disabled", true);
     $("#answer-2-btn").prop("disabled", true);
     $("#answer-3-btn").prop("disabled", true);
     $("#answer-4-btn").prop("disabled", true);
 }
 
-function undimAnsButtons() {
+function enableAnsButtons() {
     $("#answer-1-btn").prop("disabled", false);
     $("#answer-2-btn").prop("disabled", false);
     $("#answer-3-btn").prop("disabled", false);
     $("#answer-4-btn").prop("disabled", false);
 }
 
-function dimQuit() {
+function disableQuit() {
     $("#quit-btn").prop("disabled", true);
 }
 
-function undimQuit() {
+function enableQuit() {
     $("#quit-btn").prop("disabled", false);
 }
 
-function dimAllButtons() {
-    dimAnsButtons();
+function disablePlayBtn() {
+    $("#quit-btn").prop("disabled", true);
+}
+
+function enablePlayBtn() {
+    $("#quit-btn").prop("disabled", false);
+}
+
+
+function disableAllButtons() {
+    disableAnsButtons();
     $("#play-btn").prop("disabled", true);
     $("#quit-btn").prop("disabled", true);
 }
 
-function undimAllButtons() {
-    undimAnsButtons();
+function enableAllButtons() {
+    enableAnsButtons();
     $("#play-btn").prop("disabled", false);
     $("#quit-btn").prop("disabled", false);
 }
 
-function quit() {
-    if (confirm("Do you really want to quit?")) {
-        doneGame();
-    } 
+function displayQuestion(question_dQ) {
+    $("#question").html(question_dQ.question);
+    $("#answerA").html(question_dQ.A);
+    $("#answerB").html(question_dQ.B);
+    $("#answerC").html(question_dQ.C);
+    $("#answerD").html(question_dQ.D);
+    $("#correctAnswer").html(question_dQ.correctAns);
+    $("#question").show();
+    // $("#timer-display").show();
 }
 
-function doneGame() {
-    dimAnsButtons();
-    dimQuit();
-    stopClock();
-    $("#timer-display").hide();
-    $("#instructions-to-player").show();
-    $("#play-lbl").text("Play Again?");
-    $("#theAnswer").html("<h1>Game Over!</h1>");
-    $("#theAnswer").append("<h1>Good Bye!</h1>");
-}
-
-function resetAfterAnswer(thisArrayOfQuestions, index, player) {
-    stopClock();
-    if (nextQExist(thisArrayOfQuestions, index)) {
-        var subClock = setTimeout( function() {
-            $("#theAnswer").html("Answer Will Display Here");
-            undimAnsButtons();
-            askQuestions(thisArrayOfQuestions, index+1, player);
-            // doneGame();
-        }, showAnswerTime*1000);
-        console.log("something wrong in resetAfterAnswer");
+function nextQExist(questionsArray_nQE, index_nQE) {
+    if (index_nQE < questionsArray_nQE.length-1) {
+        return true;
     } else {
-        var subClock = setTimeout(function() {
-            doneGame();
-        }, showAnswerTime*1000);
+        return false;
     }
 }
 
-function showAnswer(thisArrayOfQuestions, index) {
-    var answerShouldBe = thisArrayOfQuestions[index].correctAnswer;
-    $("#theAnswer").append("<span style='color: red'>The right answer is "+answerShouldBe+"</span>");
+function lastQuestion(questions_lQ, index_lQ) {
+    if (index_lQ < questions_lQ.length-1) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
-function updatePlayer(updQuestion, curLetter, wasRight, thePlayer) {
+
+function isAnswerCorrect(questionArray_iAC, index_iAC, answerChosen) {
+    console.log("isAnswerCorrect called")
+    if (answerChosen == questionArray_iAC[index_iAC].correctAnswer) {
+        // console.log("correct");
+        return true;
+    } else {
+        // console.log("not correct");
+        return false;
+    }
+}
+
+
+function doneGame(timerToStop) {
+    console.log("doneGame called");
+    disableAnsButtons();
+    disableQuit();
+    clearInterval(timerToStop)
+    $("#timer-display").hide();
+    $("#question").hide();
+    // $("#instructions-to-player").show();
+    $("#play-lbl").text("Play Again?");
+    $("#play-btn").prop("disabled", false);
+    $("#the-answer").hide()
+    $("#game-over").html("Game Over!<br>Goodbye!");
+    $("#game-over").show();
+}
+
+function updatePlayer(question_upd, curLetter, wasRight, thePlayer) {
     thePlayer.playerAnswers[thePlayer.playerAnswers.length] = curLetter;
     if (wasRight) {
-        thePlayer.playerScore++;
+        // thePlayer.playerScore++;
         thePlayer.playerRight++;
         thePlayer.rightAnswers[thePlayer.playerAnswers.length] = curLetter;
     } else {
-        var answerShouldBe = updQuestion.correctAnswer;
-        thePlayer.playerScore--;
+        var answerShouldBe = question_upd.correctAnswer;
+        // thePlayer.playerScore--;
         thePlayer.playerWrong++;
         thePlayer.rightAnswers[thePlayer.playerAnswers.length] = answerShouldBe;
     }
+    displayPlayerStats(thePlayer);
 }
 
 function displayPlayerStats(thePlayer) {
-}
-
-function evalAnswer(thisArrayOfQuestions, index, letterChosen, somePlayer) {
-    if (isAnswerCorrect(thisArrayOfQuestions, index, letterChosen)) {
-        youreRight(thisArrayOfQuestions, index, letterChosen, somePlayer);
-    } else {
-        youreWrong(thisArrayOfQuestions, index, letterChosen, somePlayer);
-    };
-    // resetAfterAnswer(thisArrayOfQuestions, index, player);
-}
-
-function youreRight(theQuestions, index, letter, inPlayer) {
-    console.log("right answer");
-    var answerWasThis = theQuestions[index].correctAnswer;
-    $("#theAnswer").html("<h2>You chose "+letter+"<br>You're right!</h2>");
-    showAnswer(theQuestions, index)
-    updatePlayer(theQuestions[index], letter, true, inPlayer);
-}
-
-function youreWrong(theQuestions, index, letter, inPlayer) {
-    console.log("wrong answer");
-    var answerShouldBe = theQuestions[index].correctAnswer;
-    $("#theAnswer").html("<h2>You chose "+letter+"</h2><br><h1>You're Wrong, Dude!</h1><br>");
-    showAnswer(theQuestions, index)
-    updatePlayer(theQuestions[index], letter, false, inPlayer);
-}
-
-function outOfTime(inputQuestions, index, inPlayer) {
-    console.log("no answer");
-    var answerShouldBe = inputQuestions[index].correctAnswer;
-    $("#theAnswer").html("You made no choice.<br>The correct answer was "+answerShouldBe+"<br>");
-    showAnswer(inputQuestions, index);
-    updatePlayer(inputQuestions, ' ', false, inPlayer);
-}
-
-function stopClock() {
-    clearTimeout(myClockGlobal);
-    clearInterval(myCounterGlobal);
-}
-
-function askQuestions(thisArrayOfQuestions, index, player) {
-    // display timer
-    var theCount = questionTime;
-    myCounterGlobal = setInterval( function() {
-        if (theCount <= 0)
-        {
-            clearInterval(myClockGlobal);
-            // remainingTime = questionTime;
-            $("#timer").text(0);
-            return;
-        }
-        $("#timer").text(theCount);
-        theCount--;
-    }, 1000);
-
-    myClockGlobal = setTimeout(function() {
-        outOfTime(thisArrayOfQuestions, index, player);
-        if (nextQExist(thisArrayOfQuestions, index)) {
-            resetAfterAnswer(thisArrayOfQuestions, index, player);
-        } else {
-            resetAfterAnswer(thisArrayOfQuestions, index, player);
-            doneGame();
-        }
-    }, questionTime*1000);
-
-    // display the question, a function call!
-    displayQuestion(thisArrayOfQuestions[index]);
-
-    $("#quit-btn").on("click", function () {
-        stopClock();
-        quit();
-    });
-
-    $("#play-btn").on("click", function() {
-        playBtnClick(thisArrayOfQuestions, index, player);
-    });
-
-    $("#answer-1-btn").on("click", function() {
-        stopClock();
-        dimAnsButtons();
-        evalAnswer(thisArrayOfQuestions, index, "A", player);
-        resetAfterAnswer(thisArrayOfQuestions, index, player);
-    });
-
-    $("#answer-2-btn").on("click", function() {
-        stopClock();
-        dimAnsButtons();
-        evalAnswer(thisArrayOfQuestions, index, "B", player);
-        resetAfterAnswer(thisArrayOfQuestions, index, player);
-    });
-
-    $("#answer-3-btn").on("click", function() {
-        stopClock();
-        dimAnsButtons();
-        evalAnswer(thisArrayOfQuestions, index, "C", player);
-        resetAfterAnswer(thisArrayOfQuestions, index, player);
-    });
-
-    $("#answer-4-btn").on("click", function() {
-        stopClock();
-        dimAnsButtons();
-        evalAnswer(thisArrayOfQuestions, index, "D", player);
-        resetAfterAnswer(thisArrayOfQuestions, index, player);
-    });
+    // statsHTML = "You have gotten "+thePlayer.playerRight+" right and "+thePlayer.playerWrong+" wrong";
+    statsHTML =''
+    $("#rowStats").html(statsHTML);
+    // return statsHTML;
 }
 
 
-
-function playBtnClick(arrayOfQuestions, index, aPlayer) {
+function startGame(questionArray_pBC, index_pBC, aPlayer) {
+    console.log("startGame");
     var btnStatus = $("#play-lbl").html();
     switch(btnStatus) {
         case "Play":
-            index = 0;
-            console.log("you clicked Play!");
+            // console.log("you clicked Play!");
             $("#instructions-to-player").hide();
             $("#timer-display").show();
-            undimAnsButtons();
-            undimQuit();
+            enableAnsButtons();
+            enableQuit();
             $("#question").show();
             $("#play-lbl").text("Next");
-            break;
-        case "Next":
-            console.log("you clicked Next!");
-            stopClock();
-            evalAnswer(arrayOfQuestions, index, " ", aPlayer);
-            if (nextQExist(arrayOfQuestions, index)) {
-                resetAfterAnswer(arrayOfQuestions, index, aPlayer);
-            } else {
-                doneGame();
-            }
+            // $("#play-btn").prop("disabled", true);
+            askQuestions(questionArray_pBC, index_pBC+1, aPlayer);
             break;
         case "Play Again?":
             location.reload();
             // $("body").html("<h1>Not Yet Implemented</h1>")
             break;
         default:
-            console.log("something's not working in playBtnClick")
-    }
+            console.log("something's not working in startGame")
+    } 
 }
 
-function playGame(sampleQuestionArr, aPlayer) {
-    var i = 0;
+function playCheer() {
+    // console.log("cheer")
+    var choosePic = Math.floor(Math.random()*3);
+    thePic=goodPic[choosePic];
+    $("#the-image").attr("src", thePic)
+}
 
-    // start button set up
-    dimAnsButtons();
-    dimQuit();
-    $("#timer-display").hide();
-    $("#question").hide();
-    $("#play-btn").on("click", function() {
-        playBtnClick(sampleQuestionArr, 0, aPlayer);
-        askQuestions(sampleQuestionArr, 0, aPlayer);
+function playBoo() {
+    // console.log("playboo")
+    var choosePic = Math.floor(Math.random()*3);
+    thePic=badPic[choosePic];
+    $("#the-image").attr("src", thePic)
+
+}
+
+
+function muteCheer() {
+
+}
+
+function muteBoo() {
+
+}
+
+function askQuestions(questionArray_aQ, index_aQ, player) {
+    var theCount = questionTime;
+    var noAnswer = true;
+    // $("#rowStats").html(displayPlayerStats(player));
+    displayPlayerStats(player);
+    $("#row02").css("visibility", "visible");
+    $("#row03").css("visibility", "visible");
+    console.log("*********\naskQuestion called\n\tQ No. "+index_aQ+" asked\n*******");
+    // if ($("#question").css("display") == "none") {
+
+    function quit() {
+        console.log("quit() called");
+
+        var Q = $("#quit-btn").prop("disabled");
+        if (!Q) {
+            if (confirm("Do you really want to quit?")) {
+                disableQuit();
+                index_aQ = questionArray_aQ.length;
+                // clearInterval(myGlobalTime);
+                doneGame(myGlobalTime);
+            } else {
+                enableQuit();
+            }
+        }
+    }
+
+    function setUpNextQuestion(questionsArray_rAA, index_rAA, player) {
+        console.log("setUpNextQuestion called\n\tabout to call stop clock");
+        clearInterval(myGlobalTime);
+        $("#the-answer").hide();
+        $("#timer-disply").show();
+        // if (nextQExist(questionsArray_rAA, index_rAA)) {
+        if (index_rAA < questionsArray_rAA.length-1) {
+            console.log("<>there is a next question");
+            $("#the-answer").hide();
+            enableAnsButtons();
+            askQuestions(questionsArray_rAA, index_rAA+1, player);
+        } else {
+            doneGame(myGlobalTime);
+            index_aQ = questionsArray_rAA.length;
+        }
+    }
+
+
+    function evalAnswer(questionsArray_eA, index_eA, letterChosen, somePlayer) {
+        console.log("evalAnswer called\tindex is "+index_eA+"\n\t\and array len is "+questionsArray_eA.length);
+
+        $("#timer-display").hide();
+        disableAnsButtons();
+        var answerShouldBe = questionsArray_eA[index_eA].explainer;
+        var answerString = "something wrong in answer string!";
+
+        if (index_eA == questionsArray_eA) {
+            answerShouldBe = "ERROR";
+        }
+        if (isAnswerCorrect(questionsArray_eA, index_eA, letterChosen)) {
+            console.log("if: evalAns");
+            answerString = "You chose "+letterChosen+". You're right! ";
+            updatePlayer(questionsArray_eA[index_eA], letterChosen, true, somePlayer);
+            playCheer();
+        } else {
+            console.log("else: evalAns");
+            updatePlayer(questionsArray_eA[index_eA], letterChosen, false, somePlayer);
+            if (letterChosen != ' '){
+                answerString = "You chose "+letterChosen+". You're Wrong, Dude! ";
+            } else {
+                answerString = "You didn't answer. That's Wrong, Dude! ";
+            }
+            playBoo();
+        }
+        answerString += "<br><span style='color: red'>The right answer is <br>"+answerShouldBe+"<span>";
+        $("#timer-dislplay").hide();
+        $("#the-answer").html(answerString);
+        $("#the-answer").show();
+    }
+
+    //set up view
+    $("#timer-number").show();
+    $("#the-answer").hide();
+
+    //the main loop....
+    myGlobalTime = setInterval( function() {
+        console.log("the count is "+theCount);
+        $("#question").show();
+        if (theCount > 0) {
+            if ($("#the-answer").css('display') == "none") {
+                $("#timer-number").html(theCount+1);
+                $("#timer-display").show();
+            }
+            $("#timer-number").text(theCount);
+            theCount--;
+        } else if (theCount == 0) {
+            // if ($("#the-answer").css('display') == "none") {  //if the answer is NOT visible
+            if (noAnswer) {
+                console.log("answer NOT visible")
+                evalAnswer(questionArray_aQ, index_aQ, ' ', player);
+                $("#timer-display").hide();
+                $("#the-answer").show();
+            } else {
+                //nothing
+            }
+            theCount--;
+        } else if (theCount > -(showAnswerTime+1) ) {
+            if (theCount >= -showAnswerTime) {
+                //don't do anything....
+                theCount--;
+            }
+        } else if (theCount == -(showAnswerTime+1) ) {
+            clearInterval(myGlobalTime);
+            theCount = questionTime;
+            setUpNextQuestion(questionArray_aQ, index_aQ, player); 
+            // askQuestions(questionArray_aQ, index_aQ+1, player);
+        } else if (theCount < -(showAnswerTime+1) ) {
+            console.log("this sucks");
+        }
+    }, 1000);
+
+    displayQuestion(questionArray_aQ[index_aQ]);
+
+    $("#answer-1-btn").on("click", function() {
+        console.log("A1");
+        if (noAnswer) {
+            evalAnswer(questionArray_aQ, index_aQ, "A", player);
+        }
+        noAnswer = false;
     });
+
+    $("#answer-2-btn").on("click", function() {
+        console.log("A2");
+        if (noAnswer) {
+            evalAnswer(questionArray_aQ, index_aQ, "B", player);
+        }
+        noAnswer = false;
+    })
+
+    $("#answer-3-btn").on("click", function() {
+        console.log("A3");
+        if (noAnswer) {
+            evalAnswer(questionArray_aQ, index_aQ, "C", player);
+        }
+        noAnswer = false;
+    });
+
+    $("#answer-4-btn").on("click", function() {
+        console.log("A4");
+        if (noAnswer) {
+            evalAnswer(questionArray_aQ, index_aQ, "D", player);
+        }
+        noAnswer = false;
+    });
+
+    $("#quit-btn").on("click", function () {
+        console.log("quit button about to call stop clock");
+        quit();
+    });
+
+    $("#play-btn").on("click", function() {
+        nextButtonPressed(questionArray_aQ, index_aQ, player);
+    });
+
+    function nextButtonPressed(questionArray_pBC, index_pBC, aPlayer) {
+        console.log("playBtnClick");
+        var btnStatus = $("#play-lbl").html();
+        switch(btnStatus) {
+            case "Next":
+                console.log("you clicked Next!");
+                if (noAnswer) {
+                    evalAnswer(questionArray_pBC, index_pBC, " ", aPlayer);
+                } else {
+                    // var temp = setTimeout( function() {
+                    //     setUpNextQuestion(questionArray_pBC, index_pBC, aPlayer);
+                    //     clearTimeout(temp);
+                    //     enablePlayBtn();
+                    //     }, showAnswerTime*1000);
+                    // clearInterval(myGlobalTime);
+                    // disablePlayBtn();
+                }
+                break;
+            default:
+                console.log("something's not working in playBtnClick2")
+        }
+    }
+
 
 }
 

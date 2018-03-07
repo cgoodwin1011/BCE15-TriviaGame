@@ -1,0 +1,5 @@
+var goodPic = ["../images/bad-outcomes/4wx8EcIA.jpg", "../images/bad-outcomes/10-3-stooges.jpg", "../images/bad-outcomes/dumbanddumber.jpeg"]
+var badPic = ["../images/good-outcomes/alan-turing-9512017-1-402.jpg", "../images/good-outcomes/Albert_Einstein_Head.jpg", "../images/good-outcomes/euler.jpg"]
+var noPic = ''
+
+var choosePic = Math.floor(Math.random()*3)
