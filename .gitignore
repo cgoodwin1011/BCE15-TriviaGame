@@ -41,6 +41,11 @@ Thumbs.db
 #######################
 bootstrap-3.3.7/**
 
+# python environment files #
+############################
+
+python-code/venv/**
+
 # dead files
 #######################
 X/**
